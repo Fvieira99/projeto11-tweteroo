@@ -7,14 +7,7 @@ app.use(cors());
 app.use(json());
 
 const users = [];
-const tweets = [
-	{
-		username: "bobesponja",
-		avatar:
-			"https://super.abril.com.br/wp-content/uploads/2020/09/04-09_gato_SITE.jpg?quality=70&strip=info",
-		tweet: "eu amo o hub",
-	},
-];
+const tweets = [];
 
 app.post("/sign-up", (req, res) => {
 	users.push(req.body);
@@ -37,10 +30,20 @@ app.get("/tweets", (req, res) => {
 });
 
 app.post("/tweets", (req, res) => {
-	tweets.push(req.body);
-	res.send("OK");
+	const { avatar } = searchAvatar(req.body);
+	if (avatar) {
+		tweets.push({ ...req.body, avatar: avatar });
+		res.send("OK");
+	}
 });
 
 app.listen(5000, () => {
 	console.log(chalk.green.bold("Servidor funcionando"));
 });
+
+function searchAvatar(reqBody) {
+	const userInfo = users.find((user) => {
+		return user.username === reqBody.username;
+	});
+	return userInfo;
+}
