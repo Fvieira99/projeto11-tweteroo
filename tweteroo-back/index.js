@@ -16,7 +16,9 @@ app.post("/sign-up", (req, res) => {
 
 app.get("/tweets", (req, res) => {
 	const filteredTweets = [];
-	if (tweets.length <= 10 && tweets.length > 0) {
+	if (tweets.length === 0) {
+		res.send(filteredTweets);
+	} else if (tweets.length <= 10 && tweets.length > 0) {
 		for (let i = tweets.length - 1; i >= 0; i--) {
 			filteredTweets.push(tweets[i]);
 		}
